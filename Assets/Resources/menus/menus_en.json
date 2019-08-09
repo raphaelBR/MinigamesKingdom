@@ -1,0 +1,33 @@
+﻿{"items":[{"key":
+  "change_font","value": "Change Font"},{"key":
+  "change_lang","value": "Change Languages"},{"key":
+  "coming_soon","value": "Coming Soon"},{"key":
+  "continue","value": "Continue"},{"key":
+  "cost","value": "Cost"},{"key":
+  "de","value": "german"},{"key":
+  "difficulty_easy","value": "Easy"},{"key":
+  "difficulty_hard","value": "Expert"},{"key":
+  "difficulty_medium","value": "Intermediate"},{"key":
+  "en","value": "english"},{"key":
+  "enter_text","value": "Enter text..."},{"key":
+  "es","value": "spanish"},{"key":
+  "fr","value": "french"},{"key":
+  "game_basket","value": "Basket"},{"key":
+  "game_wordscape","value": "Wordscape"},{"key":
+  "i_speak","value": "I speak"},{"key":
+  "i_want_to_learn","value": "I want to learn"},{"key":
+  "it","value": "italian"},{"key":
+  "language_settings","value": "Language settings"},{"key":
+  "level_1","value": "Level 1"},{"key":
+  "level_2","value": "Level 2"},{"key":
+  "level_3","value": "Level 3"},{"key":
+  "level_4","value": "Level 4"},{"key":
+  "level_5","value": "Level 5"},{"key":
+  "level_any","value": "Level 5"},{"key":
+  "no","value": "no"},{"key":
+  "packs_all","value": "All packs"},{"key":
+  "packs_any","value": "Any pack"},{"key":
+  "reset_progress","value": "Reset Progress"},{"key":
+  "start","value": "Start"},{"key":
+  "yes","value": "yes"
+}]}
