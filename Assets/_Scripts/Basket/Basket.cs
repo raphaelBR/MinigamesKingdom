@@ -21,11 +21,10 @@ public class Basket : MonoBehaviour
 
     ScoreBank bank;
 
-    public void Init(int pieces, int decoys = 0)
+    public void Init(List<string> keys, int decoys = 0)
     {
         bank = FindObjectOfType<ScoreBank>();
-        var keys = Dico.GetRandomKeys(pieces + decoys).ToArray();
-        for (int i = 0; i < keys.Length; i++)
+        for (int i = 0; i < keys.Count; i++)
         {
             var item = Instantiate(itemPrefab, itemParent);
             item.Init(keys[i]);
@@ -84,6 +83,8 @@ public class Basket : MonoBehaviour
             box.anim.SetTrigger("Success");
             bank.Success(box.k);
             boxes.Remove(box);
+            Debug.Log("Hardcoded value here");
+            bank.Completion += 0.25f / 5f;
             if (boxes.Count == 0)
             {
                 onComplete.Invoke();

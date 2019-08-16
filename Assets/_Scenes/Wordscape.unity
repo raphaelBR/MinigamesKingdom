@@ -403,12 +403,14 @@ MonoBehaviour:
   answerText: {fileID: 998711904}
   letterPrefab: {fileID: -3652310182479625224, guid: 3afde8b8a211c47458e41ca32a7a0913,
     type: 3}
-  spawnRange: 125
+  inputZone: {fileID: 1989379840}
+  questionZone: {fileID: 2074085561}
   spawnCenter: {fileID: 2115403417}
   line: {fileID: 246369814}
   line2: {fileID: 78293479}
   charge: {fileID: 171318830}
   explode: {fileID: 212838883}
+  spawnRange: 200
 --- !u!1 &171318827
 GameObject:
   m_ObjectHideFlags: 0
@@ -10091,7 +10093,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -10, y: -10}
+  m_SizeDelta: {x: -10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &488090895
 Canvas:
@@ -11443,11 +11445,11 @@ RectTransform:
   m_Father: {fileID: 123003349}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.01}
-  m_AnchorMax: {x: 1, y: 0.4}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_SizeDelta: {x: 0, y: 500}
+  m_Pivot: {x: 0.5, y: 0}
 --- !u!1 &2074085560
 GameObject:
   m_ObjectHideFlags: 0
@@ -11481,10 +11483,10 @@ RectTransform:
   m_Father: {fileID: 123003349}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0.9}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 250}
+  m_SizeDelta: {x: 0, y: -500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2115403416
 GameObject:

@@ -1,15 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 using System.Linq;
 
+/// <summary>
+/// The interface used to change to game’s font.
+/// </summary>
 [RequireComponent(typeof(ScrollRect))]
 public class FontSettings : MonoBehaviour {
 
     public Button prefab;
-    public UnityEvent onValidate;
 
     Transform content;
     List<Font> allFonts;
@@ -23,15 +24,15 @@ public class FontSettings : MonoBehaviour {
         allFonts.Add(Resources.GetBuiltinResource<Font>("Arial.ttf"));
         if (Parameters.Font == null)
         {
-            Parameters.Font = allFonts[0];
+            Parameters.Font = Resources.GetBuiltinResource<Font>("Arial.ttf");
         }
-        for (int i = 0; i < allFonts.Count; i++)
+        foreach (var font in allFonts)
         {
-            SpawnButton(allFonts[i], i);
+            SpawnButton(font);
         }
 	}
 	
-	void SpawnButton(Font f, int i) {
+	void SpawnButton(Font f) {
         Button b = Instantiate(prefab, content);
         Text t = b.GetComponentInChildren<Text>();
         t.font = f;
@@ -56,11 +57,5 @@ public class FontSettings : MonoBehaviour {
         {
             bu.interactable = (bu.GetComponentInChildren<Text>().font != Parameters.Font);
         }
-        onValidate.Invoke();
-    }
-
-    public void Cancel()
-    {
-        onValidate.Invoke();
     }
 }

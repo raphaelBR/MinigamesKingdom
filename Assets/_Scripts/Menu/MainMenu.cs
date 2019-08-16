@@ -3,21 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// The interface used to navigate between menus.
+/// </summary>
 public class MainMenu : MonoBehaviour {
-
+    
     public List<CustomAnimation> tabsAnim;
-    public List<CustomAnimation> lobbyAnim;
-    public List<CustomAnimation> settingsAnim;
+    public List<Button> tabsButton;
     public CustomAnimation lowerBarScrub;
+    public CustomAnimation lowerBar;
 
     LanguageSettings langSettings;
     bool langSet;
     int currentMenu;
 
     private void Awake()
-    {
-        langSettings = FindObjectOfType<LanguageSettings>();
+    { 
         currentMenu = 0;
+        for (int i = 0; i < tabsButton.Count; i++)
+        {
+            tabsButton[i].interactable = (i != currentMenu);
+        }
         tabsAnim[currentMenu].Teleport(1);
         if (Parameters.Locale == Languages.Null || Parameters.Foreign == Languages.Null)
         {
@@ -26,13 +32,15 @@ public class MainMenu : MonoBehaviour {
         else
         {
             langSet = true;
+            lowerBar.GoTo(1);
         }
     }
 
     public void SetLang()
     {
-        langSettings.Setup();
-        SetSettings(2);
+        FindObjectOfType<LanguageSettings>().Setup();
+        SetMenu(3);
+        FindObjectOfType<Tweaks>().SelectSubTab(2);
         langSet = false;
     }
 
@@ -47,6 +55,9 @@ public class MainMenu : MonoBehaviour {
             SetMenu(0);
         }
         langSet = true;
+        lowerBar.GoTo(1);
+        Dico.LoadPackages();
+        Dico.LoadMenus();
     }
 
     public void SetMenu(int i)
@@ -55,6 +66,8 @@ public class MainMenu : MonoBehaviour {
         {
             return;
         }
+        tabsButton[currentMenu].interactable = true;
+        tabsButton[i].interactable = false;
         lowerBarScrub.Play(currentMenu, i);
         if (i > currentMenu)
         {
@@ -67,15 +80,5 @@ public class MainMenu : MonoBehaviour {
             tabsAnim[i].Play(0, 1);
         }
         currentMenu = i;
-    }
-
-    public void SetSettings(int i)
-    {
-        SetMenu(3);
-    }
-
-    public void SetLobby(int i)
-    {
-        SetMenu(0);
     }
 }

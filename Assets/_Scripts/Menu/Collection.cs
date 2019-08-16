@@ -82,18 +82,21 @@ public class ToggleBundle
     }
 }
 
+/// <summary>
+/// The interface that lets the player consult his collection.
+/// </summary>
 public class Collection : MonoBehaviour
 {
+    [Header("Spawn")]
     public CardPack cardPack;
-
     public Transform packParent;
     public Toggle packPrefab;
-
+    [Header("Filters")]
     public ToggleBundle pack;
     public ToggleBundle rarity;
     public ToggleBundle level;
     public InputField textFilter;
-
+    [Header("Anims")]
     public CustomAnimation favorites;
     public List<CustomAnimation> advanced;
     public CustomAnimation noResults;
@@ -102,8 +105,6 @@ public class Collection : MonoBehaviour
     bool favoritesFilter = false;
     List<string> packsFilter = new List<string>();
     string testString = "";
-
-    CanvasScaler scale;
 
     private void Start()
     {
@@ -143,7 +144,7 @@ public class Collection : MonoBehaviour
 
         // Create all cards
         cardPack.Clear();
-        foreach (KeyValuePair<string, Item> item in Dico.dico.OrderBy(w => w.Value.foreignText))
+        foreach (KeyValuePair<string, DicoItem> item in Dico.dico.OrderBy(w => w.Value.foreignText))
         {
             cardPack.Spawn(item.Key);
             yield return null;
@@ -327,12 +328,25 @@ public class Collection : MonoBehaviour
     public void FilterPack(string s, Toggle b)
     {
         pack.Filter(b);
+        packsFilter.Clear();
+        foreach (Toggle t in pack.members)
+        {
+            if (t.isOn)
+            {
+                packsFilter.Add(t.name);
+            }
+        }
         Refresh();
     }
 
     public void FilterPackAny()
     {
         pack.Filter();
+        packsFilter.Clear();
+        foreach (Toggle t in pack.members)
+        {
+            packsFilter.Add(t.name);
+        }
         Refresh();
     }
 }

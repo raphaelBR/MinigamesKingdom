@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// The canvas that transitions between scenes.
+/// </summary>
 public class Loading : MonoBehaviour {
     
 

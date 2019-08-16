@@ -3,29 +3,34 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// The interface used to select a minigame.
+/// </summary>
 public class Minigames : MonoBehaviour
 {
+    [Header("Coins")]
     public Text pointsA;
     public Text pointsB;
     public Text pointsC;
-
+    [Header("Costs")]
     public int costIntermediate;
     public int costExpert;
-
+    [Header("Costs")]
     public Text boostCount;
     public Text multiplierCount;
     public Text multiplierCount2;
-
+    [Header("Costs")]
     public ToggleBundle boosters;
     public Booster boosterPrefab;
     public Transform boosterParent;
-
+    [Header("Anims")]
     public List<CustomAnimation> lexicalSwitch;
     public List<CustomAnimation> helpers;
     public CustomAnimation easyDoor;
     public CustomAnimation mediumDoor;
     public CustomAnimation hardDoor;
 
+    List<string> packs = new List<string>();
     bool lex = false;
 
     public void Init()
@@ -72,6 +77,7 @@ public class Minigames : MonoBehaviour
             boosters.members.Add(b.toggle);
             b.toggle.onValueChanged.AddListener(delegate { boosters.Filter(b.toggle); });
             b.GetComponent<Image>().sprite = Dico.GetPackage(item).booster;
+            b.name = item;
         }
         boosters.Filter();
     }
@@ -79,6 +85,7 @@ public class Minigames : MonoBehaviour
     public void RefreshPacks()
     {
         int count = boosters.members.Count;
+
         if (boosters.any.isOn == false)
         {
             count = 0;
@@ -90,6 +97,7 @@ public class Minigames : MonoBehaviour
                 }
             }
         }
+
         boostCount.text = count.ToString() + " packs";
         if (count <= 1)
         {
@@ -123,7 +131,6 @@ public class Minigames : MonoBehaviour
         }
     }
 
-
     public void ToggleLexical()
     {
         lex = !lex;
@@ -140,6 +147,40 @@ public class Minigames : MonoBehaviour
         foreach (var anim in lexicalSwitch)
         {
             anim.GoTo(i);
+        }
+    }
+
+    public void Pay(int i)
+    {
+        if (i == 0)
+        {
+            Progress.progress.pointsA -= costIntermediate;
+        }
+        else
+        {
+            Progress.progress.pointsB -= costExpert;
+        }
+    }
+
+    public void LoadDicos()
+    {
+        Dico.dico.Clear();
+        if (boosters.any.isOn)
+        {
+            foreach (string s in Account.unlocks.packs)
+            {
+                Dico.AddPack(s);
+            }
+        }
+        else
+        {
+            foreach (Toggle b in boosters.members)
+            {
+                if (b.isOn)
+                {
+                    Dico.AddPack(b.name);
+                }
+            }
         }
     }
 

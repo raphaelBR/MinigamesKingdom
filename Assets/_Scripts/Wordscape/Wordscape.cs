@@ -11,7 +11,8 @@ public class Wordscape : Exercice
     [Header("Input")]
     public Text answerText;
     public WordscapeLetter letterPrefab;
-    public float spawnRange = 120f;
+    public RectTransform inputZone;
+    public RectTransform questionZone;
     public Transform spawnCenter;
     [Header("Feedback")]
     public LineRenderer line;
@@ -21,10 +22,17 @@ public class Wordscape : Exercice
     
     List<WordscapeLetter> letters = new List<WordscapeLetter>();
     List<Vector3> linePoints = new List<Vector3>();
+    [HideInInspector]
+    public float spawnRange = 100f;
 
     public override void Init(string test)
     {
+        // Scale
+        questionZone.offsetMin = new Vector2(0f, Screen.width * 0.85f);
+        inputZone.offsetMax = new Vector2(0f, Screen.width * 0.85f);
+        spawnRange = Screen.width * 0.3f;
         // Find a word
+        questionImage.sprite = null;
         questionImage.sprite = Dico.Picture(test);
         questionText.text = Dico.Locale(test).ToUpper();
         solution = Dico.Foreign(test);

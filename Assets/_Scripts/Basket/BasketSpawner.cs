@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BasketSpawner : MonoBehaviour
+/// <summary>
+/// Spawns the game items and defines the game status.
+/// </summary>
+public class BasketSpawner : Practice
 {
 
     [Header("Exercise")]
@@ -17,18 +20,17 @@ public class BasketSpawner : MonoBehaviour
     public float waitBeforeAlign = 0.5f;
     public float alignDuration = 0.5f;
     public AnimationCurve alignAnim;
+    int layers = 5;
     
     Basket current;
     Vector3 align;
-    ScoreBank bank;
+    int layerCount = 0;
 
-    private void Awake()
+    void Start()
     {
-        bank = FindObjectOfType<ScoreBank>();
         align = basketPool.position - basketSpawn.position;
-        Dico.AddPack("food");
         current = Instantiate(basketPrefab, basketPool);
-        current.Init(4, 1);
+        current.Init(generator.Generate(5), 1);
         current.onComplete.AddListener(ScreenComplete);
     }
 
@@ -36,20 +38,28 @@ public class BasketSpawner : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            bank.EndGame();
+            bank.EndGame(true);
         }
     }
 
     void ScreenComplete()
     {
-        var pos = current.transform.position;
-        current.transform.parent = basketPool;
-        current.transform.position = pos;
+        layerCount++;
+        if (layerCount >= layers)
+        {
+            bank.EndGame(true);
+        }
+        else
+        {
+            var pos = current.transform.position;
+            current.transform.parent = basketPool;
+            current.transform.position = pos;
 
-        current = Instantiate(basketPrefab, basketSpawn.position, basketSpawn.rotation, basketPool);
-        current.Init(4, 1);
-        current.onComplete.AddListener(ScreenComplete);
-        StartCoroutine(Align());
+            current = Instantiate(basketPrefab, basketSpawn.position, basketSpawn.rotation, basketPool);
+            current.Init(generator.Generate(5), 1);
+            current.onComplete.AddListener(ScreenComplete);
+            StartCoroutine(Align());
+        }
     }
 
     IEnumerator Align()

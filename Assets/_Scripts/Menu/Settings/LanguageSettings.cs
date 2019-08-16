@@ -6,19 +6,22 @@ using System;
 using System.Linq;
 using UnityEngine.Events;
 
+/// <summary>
+/// The interface used to change the game’s languages.
+/// </summary>
 public class LanguageSettings : MonoBehaviour {
 
     public TextLocalized languageHeader;
     public Text localeHeader;
     public Button[] locals;
     [Space(5f)]
-    public Animator foreign;
+    public CustomAnimation foreign;
     public Text foreignHeader;
     public Button[] foreigns;
     [Space(5f)]
-    public Animator validate;
+    public CustomAnimation validate;
     public UnityEvent onValidate;
-    public Animator skipAnim;
+    public CustomAnimation lowerBar;
 
     bool flag1;
     bool flag2;
@@ -29,13 +32,25 @@ public class LanguageSettings : MonoBehaviour {
     {
         localized = FindObjectsOfType<TextLocalized>();
         langList = Enum.GetValues(typeof(Languages)).Cast<Languages>().ToList();
-        foreign.SetBool("Active", Parameters.Locale != Languages.Null);
-        validate.SetBool("Active", Parameters.Foreign != Languages.Null);
-        foreign.SetTrigger("Init");
-        validate.SetTrigger("Init");
+        if (Parameters.Locale != Languages.Null)
+        {
+            foreign.Play(0, 1);
+        }
+        else
+        {
+            foreign.Teleport(0);
+        }
+        if (Parameters.Foreign != Languages.Null)
+        {
+            validate.Play(0, 1);
+        }
+        else
+        {
+            validate.Teleport(0);
+        }
         if (Parameters.Locale == Languages.Null || Parameters.Foreign == Languages.Null)
         {
-            skipAnim.SetTrigger("Hide");
+            lowerBar.GoTo(0);
         }
         if (Parameters.Locale != Languages.Null)
         {
@@ -66,13 +81,9 @@ public class LanguageSettings : MonoBehaviour {
         Parameters.Locale = (Languages)Enum.Parse(typeof(Languages), s, true);
         Parameters.Foreign = Languages.Null;
         PrepareForeigns();
-        if (foreign.GetBool("Active"))
-        {
-            foreign.SetTrigger("Reset");
-        }
-        foreign.SetBool("Active", true);
-        validate.SetBool("Active", false);
-        skipAnim.SetTrigger("Hide");
+        foreign.Play(0, 1);
+        validate.GoTo(0);
+        lowerBar.GoTo(0);
         Dico.LoadMenus();
         RefreshTexts();
     }
@@ -80,11 +91,7 @@ public class LanguageSettings : MonoBehaviour {
     public void SetForeign(Languages lang)
     {
         Parameters.Foreign = lang;
-        if (validate.GetBool("Active"))
-        {
-            validate.SetTrigger("Reset");
-        }
-        validate.SetBool("Active", true);
+        validate.Play(0, 1);
         RefreshTexts();
         Progress.Load();
         Dico.LoadMenus();
