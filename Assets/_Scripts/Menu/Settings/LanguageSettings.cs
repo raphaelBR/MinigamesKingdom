@@ -15,13 +15,13 @@ public class LanguageSettings : MonoBehaviour {
     public Text localeHeader;
     public Button[] locals;
     [Space(5f)]
-    public CustomAnimation foreign;
+    public CustomAnimRect foreign;
     public Text foreignHeader;
     public Button[] foreigns;
     [Space(5f)]
-    public CustomAnimation validate;
+    public CustomAnimRect validate;
     public UnityEvent onValidate;
-    public CustomAnimation lowerBar;
+    public CustomAnimRect lowerBar;
 
     bool flag1;
     bool flag2;

@@ -12,7 +12,8 @@ public class Basket : MonoBehaviour
     public BasketBox boxPrefab;
 
     List<BasketItem> items = new List<BasketItem>();
-    List<BasketBox> boxes = new List<BasketBox>();
+    [HideInInspector]
+    public List<BasketBox> boxes = new List<BasketBox>();
     [HideInInspector]
     public BasketItem selected;
 
@@ -79,8 +80,7 @@ public class Basket : MonoBehaviour
             items.Remove(selected);
             selected.Replace();
             Reposition();
-            yield return StartCoroutine(box.CloseBox(selected));
-            box.anim.SetTrigger("Success");
+            yield return StartCoroutine(box.Success(selected));
             bank.Success(box.k);
             boxes.Remove(box);
             Debug.Log("Hardcoded value here");
@@ -100,7 +100,7 @@ public class Basket : MonoBehaviour
             {
                 selected.errors.Add(box);
             }
-            box.anim.SetTrigger("Fail");
+            box.Fail();
             bank.Failure(box.k);
             bank.ChangeXP(selected.k, -1);
         }

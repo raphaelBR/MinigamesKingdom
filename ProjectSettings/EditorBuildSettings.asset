@@ -14,4 +14,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Scenes/Wordscape.unity
     guid: 34850e024c5eb524094f9e7fa9032e07
+  - enabled: 1
+    path: Assets/_Scenes/Picker.unity
+    guid: 52fbb3f14fa20384da4ab921524afb5e
+  - enabled: 1
+    path: Assets/_Scenes/Assemble.unity
+    guid: 00c4edad03e361c4c9f537ee67988cc7
+  - enabled: 1
+    path: Assets/_Scenes/Crossword.unity
+    guid: 156137f8400c6174baca7cd59059be9f
   m_configObjects: {}

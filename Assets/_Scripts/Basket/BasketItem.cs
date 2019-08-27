@@ -36,8 +36,11 @@ public class BasketItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
         master.selected = this;
         foreach (var box in errors)
         {
-            box.anim.ResetTrigger("Neutral");
-            box.anim.SetTrigger("Error");
+            box.error.GoTo(1);
+        }
+        foreach (var box in master.boxes)
+        {
+            box.blocked = errors.Contains(box);
         }
         anim.SetBool("Drag", true);
     }
@@ -52,7 +55,7 @@ public class BasketItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
         StartCoroutine(Replace());
         foreach (var box in errors)
         {
-            box.anim.SetTrigger("Neutral");
+            box.error.GoTo(0);
         }
         anim.SetBool("Drag", false);
     }

@@ -24,11 +24,11 @@ public class Minigames : MonoBehaviour
     public Booster boosterPrefab;
     public Transform boosterParent;
     [Header("Anims")]
-    public List<CustomAnimation> lexicalSwitch;
-    public List<CustomAnimation> helpers;
-    public CustomAnimation easyDoor;
-    public CustomAnimation mediumDoor;
-    public CustomAnimation hardDoor;
+    public List<CustomAnimRect> lexicalSwitch;
+    public List<CustomAnimRect> helpers;
+    public CustomAnimRect easyDoor;
+    public CustomAnimRect mediumDoor;
+    public CustomAnimRect hardDoor;
 
     List<string> packs = new List<string>();
     bool lex = false;

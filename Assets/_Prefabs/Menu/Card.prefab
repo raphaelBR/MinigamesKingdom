@@ -263,6 +263,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f417703afe669664b91313da0a650239, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  favorite: {fileID: 4648977852625533976}
+  dummy: {fileID: 2203337655269866374, guid: 78c2eecfd6acabd4e8c8cc5923a2fd58, type: 3}
+  details:
+  - {fileID: 4721604927388769247}
+  - {fileID: 3607348129246991501}
   cardTemplate: {fileID: 2600436277080232906}
   picture: {fileID: 5848657869504355574}
   locale: {fileID: 1174325656664314474}
@@ -275,17 +280,16 @@ MonoBehaviour:
   - {fileID: 21300000, guid: b0974edc958f8b1458bcb1437d4b7fe1, type: 3}
   - {fileID: 21300000, guid: 0c7f36789c7a6954691708ef88fcda99, type: 3}
   - {fileID: 21300000, guid: 834d1011eab2aa745b3a8a6d76f830c2, type: 3}
+  - {fileID: 21300000, guid: 834d1011eab2aa745b3a8a6d76f830c2, type: 3}
+  - {fileID: 21300000, guid: 834d1011eab2aa745b3a8a6d76f830c2, type: 3}
   expPercent: {fileID: 3456843875160400938}
   levelsBall:
   - {fileID: -4546912825077440081, guid: e2c7381ebcd79bb41b75e182e3637e04, type: 3}
   - {fileID: -7852319986074135650, guid: 99e5db67dd556874fb344f42f3fd6553, type: 3}
   - {fileID: 1420708936891344386, guid: de6e655e16711da4cbee5c4c5d531bbe, type: 3}
+  - {fileID: 1420708936891344386, guid: de6e655e16711da4cbee5c4c5d531bbe, type: 3}
+  - {fileID: 1420708936891344386, guid: de6e655e16711da4cbee5c4c5d531bbe, type: 3}
   ball: {fileID: 4787740365446239596}
-  favorite: {fileID: 4648977852625533976}
-  dummy: {fileID: 2203337655269866374, guid: 78c2eecfd6acabd4e8c8cc5923a2fd58, type: 3}
-  details:
-  - {fileID: 4721604927388769247}
-  - {fileID: 3607348129246991501}
   key: 
   siblingIndex: 0
   activeDummy: {fileID: 0}

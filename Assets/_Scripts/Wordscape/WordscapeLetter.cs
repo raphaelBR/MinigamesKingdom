@@ -70,6 +70,7 @@ public class WordscapeLetter : MonoBehaviour
             transform.localPosition = root + new Vector3(Mathf.Sin(Time.time * shakeSpeed) * shakeAmount, 0f, 0f);
             yield return null;
         }
+        Interactable = true;
     }
 
 }

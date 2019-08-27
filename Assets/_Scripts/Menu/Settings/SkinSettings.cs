@@ -63,7 +63,7 @@ public class SkinSettings : MonoBehaviour {
 
     public GameObject noCustom;
     public SkinPreview prefab;
-    public CustomAnimation customization;
+    public CustomAnimRect customization;
     public ButtonsBundle contents;
     public ButtonsBundle backs;
     public ButtonsBundle clickables;

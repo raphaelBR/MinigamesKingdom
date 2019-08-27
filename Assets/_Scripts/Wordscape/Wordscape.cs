@@ -3,38 +3,63 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Wordscape : Exercice
+public class Wordscape : Practice
 {
     [Header("Question")]
-    public Image questionImage;
-    public Text questionText;
+    public WordscapeQuestion questionPrefab;
+    public Transform questionParent;
+    public RectTransform questionBefore;
+    public RectTransform questionIn;
+    public RectTransform questionAfter;
     [Header("Input")]
     public Text answerText;
     public WordscapeLetter letterPrefab;
     public RectTransform inputZone;
-    public RectTransform questionZone;
+    public RectTransform inputField;
     public Transform spawnCenter;
     [Header("Feedback")]
     public LineRenderer line;
     public LineRenderer line2;
     public ParticleSystem charge;
     public ParticleSystem explode;
-    
+    public int total = 6;
+
+    List<string> words = new List<string>();
     List<WordscapeLetter> letters = new List<WordscapeLetter>();
     List<Vector3> linePoints = new List<Vector3>();
     [HideInInspector]
     public float spawnRange = 100f;
+    string solution;
+    string answer;
+    int progress;
+    WordscapeQuestion current;
 
-    public override void Init(string test)
+    private void Start()
     {
         // Scale
-        questionZone.offsetMin = new Vector2(0f, Screen.width * 0.85f);
+        questionIn.offsetMin = new Vector2(0f, Screen.width * 0.85f + 100f);
+        inputField.offsetMin = new Vector2(0f, Screen.width * 0.85f);
+        inputField.offsetMax = new Vector2(0f, Screen.width * 0.85f + 100f);
         inputZone.offsetMax = new Vector2(0f, Screen.width * 0.85f);
         spawnRange = Screen.width * 0.3f;
+        // Init
+        generator.Init();
+        words = generator.Generate(total);
+        progress = 0;
+        Init();
+    }
+
+    public void Init()
+    {
         // Find a word
-        questionImage.sprite = null;
-        questionImage.sprite = Dico.Picture(test);
-        questionText.text = Dico.Locale(test).ToUpper();
+        string test = words[progress];
+        current = Instantiate(questionPrefab, questionParent);
+        current.Init(test);
+        current.anim.state[0].status = questionBefore;
+        current.anim.state[1].status = questionIn;
+        current.anim.state[2].status = questionAfter;
+        current.anim.Play(0, 1);
+
         solution = Dico.Foreign(test);
         // Clear the board
         answer = "";
@@ -73,11 +98,18 @@ public class Wordscape : Exercice
         if (solution.Length == answer.Length)
         {
             linePoints.Clear();
-            Confirm(string.Equals(solution, answer, System.StringComparison.OrdinalIgnoreCase));
+            if (string.Equals(solution, answer, System.StringComparison.OrdinalIgnoreCase))
+            {
+                StartCoroutine(Win());
+            }
+            else
+            {
+                StartCoroutine(Fail());
+            }
         }
     }
 
-    protected override IEnumerator Win()
+    IEnumerator Win()
     {
         foreach (WordscapeLetter t in letters)
         {
@@ -87,19 +119,34 @@ public class Wordscape : Exercice
         yield return new WaitForSeconds(0.5f);
         explode.Play();
         yield return new WaitForSeconds(0.2f);
-        OnWin.Invoke();
-        Init(Dico.GetRandomKey());
+        bank.Success(words[progress]);
+        current.anim.Play(1, 2);
+        //OnWin.Invoke();
+        progress++;
+        bank.Completion = (float)progress / total;
+        if (progress >= total)
+        {
+            bank.EndGame(true);
+        }
+        else
+        {
+            Init();
+        }
     }
 
-    protected override IEnumerator Fail()
+    IEnumerator Fail()
     {
+        bank.Failure(words[progress]);
         foreach (WordscapeLetter t in letters)
         {
             StartCoroutine(t.Shake());
         }
         yield return new WaitForSeconds(0.5f);
-        OnLose.Invoke();
-        //Init(Dico.RandomKey());
+        answer = "";
+        answerText.text = answer.PadRight(solution.Length, '\u005F').Replace("_", " _");
+
+        //OnLose.Invoke();
+        //Init();
     }
 
     public void Reset()

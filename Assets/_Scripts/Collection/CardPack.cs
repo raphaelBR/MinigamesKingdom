@@ -11,9 +11,9 @@ public class CardPack : MonoBehaviour
     public Card cardPrefab;
     public Transform cardParent;
     public RectTransform bigSpot;
-    public CustomAnimation blocker;
-    public CustomAnimation previous;
-    public CustomAnimation next;
+    public CustomAnimRect blocker;
+    public CustomAnimRect previous;
+    public CustomAnimRect next;
 
     [HideInInspector]
     public Card activeCard;

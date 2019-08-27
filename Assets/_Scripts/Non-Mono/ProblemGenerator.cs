@@ -5,6 +5,7 @@ using UnityEngine;
 /// <summary>
 /// Selects which question to ask in the minigames.
 /// </summary>
+[System.Serializable]
 public class ProblemGenerator
 {
 

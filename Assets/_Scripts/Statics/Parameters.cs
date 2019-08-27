@@ -8,7 +8,7 @@ using System.IO;
 /// </summary>
 public static class Parameters
 {
-    static Settings settings = new Settings();
+    public static Settings settings = new Settings();
     static string Datapath
     {
         get
@@ -29,6 +29,10 @@ public static class Parameters
         }
         set
         {
+            if (value != null)
+            {
+                settings.fontName = value.fontNames[0];
+            }
             settings.currentFont = value;
             Save();
         }
@@ -98,6 +102,10 @@ public static class Parameters
         {
             string jsonString = streamReader.ReadToEnd();
             settings = JsonUtility.FromJson<Settings>(jsonString);
+        }
+        if (settings.fontName != null)
+        {
+            Font = Resources.Load<Font>("Fonts/" + settings.fontName);
         }
     }
 

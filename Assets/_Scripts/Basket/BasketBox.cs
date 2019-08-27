@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-[RequireComponent(typeof(Animator))]
 public class BasketBox : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler, IPointerUpHandler
 {
     public Text question;
@@ -14,17 +13,22 @@ public class BasketBox : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoi
     public AnimationCurve placeAnim;
     public ParticleSystem win;
     public GameObject front;
+    public CustomAnimImage hover;
+    public CustomAnimRect success;
+    public CustomAnimRect error;
+    public CustomAnimImage mistake;
+    public CustomAnimRect errorShake;
+    public CustomAnimRect finished;
+    public bool blocked;
 
     [HideInInspector]
     public Basket master;
     [HideInInspector]
     public string k;
-    [HideInInspector]
-    public Animator anim;
 
     public void Init(string key)
     {
-        anim = GetComponent<Animator>();
+        blocked = false;
         k = key;
         question.text = Dico.Foreign(key).ToUpper();
         front.SetActive(false);
@@ -32,30 +36,32 @@ public class BasketBox : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoi
 
     void IDropHandler.OnDrop(PointerEventData eventData)
     {
-        StartCoroutine(master.Fuse(this));
+        if (!blocked)
+        {
+            StartCoroutine(master.Fuse(this));
+        }
     }
 
     void IPointerUpHandler.OnPointerUp(PointerEventData eventData)
     {
-        anim.SetBool("Hover", false);
+        hover.GoTo(0);
     }
 
     void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
     {
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0) && !blocked)
         {
-            anim.SetBool("Hover", true);
+            hover.GoTo(1);
         }
     }
 
     void IPointerExitHandler.OnPointerExit(PointerEventData eventData)
     {
-        anim.SetBool("Hover", false);
+        hover.GoTo(0);
     }
 
-    public IEnumerator CloseBox(BasketItem item)
+    public IEnumerator Success(BasketItem item)
     {
-        anim.SetTrigger("Win");
         var rect = item.transform as RectTransform;
         var pos = rect.position;
         rect.anchorMin = new Vector2(0.5f, 0.5f);
@@ -63,18 +69,27 @@ public class BasketBox : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoi
 
         rect.parent = answerPrepare;
         rect.position = pos;
+        hover.GoTo(0);
+        success.GoTo(1);
         yield return StartCoroutine(item.Replace());
         Destroy(item);
         front.SetActive(true);
-        
+
         for (float f = 0f; f < 1f; f += Time.deltaTime / placeDuration)
         {
             rect.position = Vector3.Lerp(answerPrepare.position, answerPlace.position, placeAnim.Evaluate(f));
             yield return null;
         }
-        anim.SetTrigger("Success");
+        finished.GoTo(1);
         win.Play();
         Destroy(this);
+    }
+
+    public void Fail()
+    {
+        hover.GoTo(0);
+        mistake.PlayChain();
+        errorShake.PlayChain();
     }
 
 }

@@ -28,6 +28,7 @@ public class BasketSpawner : Practice
 
     void Start()
     {
+        generator.Init();
         align = basketPool.position - basketSpawn.position;
         current = Instantiate(basketPrefab, basketPool);
         current.Init(generator.Generate(5), 1);

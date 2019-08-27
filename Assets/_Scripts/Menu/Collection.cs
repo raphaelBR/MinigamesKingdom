@@ -97,9 +97,9 @@ public class Collection : MonoBehaviour
     public ToggleBundle level;
     public InputField textFilter;
     [Header("Anims")]
-    public CustomAnimation favorites;
-    public List<CustomAnimation> advanced;
-    public CustomAnimation noResults;
+    public CustomAnimRect favorites;
+    public List<CustomAnimRect> advanced;
+    public CustomAnimRect noResults;
 
     bool advancedFilter = false;
     bool favoritesFilter = false;

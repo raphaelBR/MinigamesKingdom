@@ -11,7 +11,7 @@ public class Card : MonoBehaviour {
     [Header("Function")]
     public Toggle favorite;
     public GameObject dummy;
-    public CustomAnimation[] details;
+    public CustomAnimRect[] details;
     [Header("Infos")]
     public Image cardTemplate;
     public Image picture;
@@ -28,7 +28,7 @@ public class Card : MonoBehaviour {
     public Sprite[] levelsBall;
     public Image ball;
 
-    CustomAnimation anim;
+    CustomAnimRect anim;
     
     [HideInInspector]
     public string key;
@@ -66,7 +66,7 @@ public class Card : MonoBehaviour {
 
     public void Init(string k, CardPack p)
     {
-        anim = GetComponent<CustomAnimation>();
+        anim = GetComponent<CustomAnimRect>();
         col = FindObjectOfType<Collection>();
         anim.state[0].status = p.bigSpot;
         parent = transform.parent;

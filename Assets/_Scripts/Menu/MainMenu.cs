@@ -8,10 +8,10 @@ using UnityEngine.UI;
 /// </summary>
 public class MainMenu : MonoBehaviour {
     
-    public List<CustomAnimation> tabsAnim;
+    public List<CustomAnimRect> tabsAnim;
     public List<Button> tabsButton;
-    public CustomAnimation lowerBarScrub;
-    public CustomAnimation lowerBar;
+    public CustomAnimRect lowerBarScrub;
+    public CustomAnimRect lowerBar;
 
     LanguageSettings langSettings;
     bool langSet;

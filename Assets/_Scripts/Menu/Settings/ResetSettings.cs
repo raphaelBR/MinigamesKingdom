@@ -7,7 +7,7 @@ using UnityEngine;
 /// </summary>
 public class ResetSettings : MonoBehaviour
 {
-    public CustomAnimation confirm;
+    public CustomAnimRect confirm;
 
     Loading load;
 

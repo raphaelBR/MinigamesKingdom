@@ -7,7 +7,7 @@ using UnityEngine;
 /// </summary>
 public class Lobby : MonoBehaviour
 {
-    public List<CustomAnimation> subTabs;
+    public List<CustomAnimRect> subTabs;
     
     public void Init()
     {
