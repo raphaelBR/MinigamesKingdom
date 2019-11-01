@@ -6,7 +6,9 @@ using System.IO;
 [System.Serializable]
 public class Unlocks
 {
-    public List<string> packs = new List<string>() { "food", "colors" };
+    public List<string> packs = new List<string>() { "food" };
+    public List<string> skins = new List<string>() { "Default" };
+    public List<string> fonts = new List<string>() { "Asap" };
 }
 
 /// <summary>
@@ -27,9 +29,9 @@ static class Account
 
     static Account()
     {
-        var t = Resources.Load<TextAsset>("unlocks");
-        unlocks = JsonUtility.FromJson<Unlocks>(t.text);
-        //Load();
+        //var t = Resources.Load<TextAsset>("unlocks");
+        //unlocks = JsonUtility.FromJson<Unlocks>(t.text);
+        Load();
     }
 
     public static void Save()
@@ -55,6 +57,50 @@ static class Account
         else
         {
             Save();
+        }
+    }
+
+    public static void Unlock(UnlockType type, string id)
+    {
+        switch (type)
+        {
+            case UnlockType.Pack:
+                if (unlocks.packs.Contains(id) == false)
+                {
+                    unlocks.packs.Add(id);
+                }
+                break;
+            case UnlockType.Skin:
+                if (unlocks.skins.Contains(id) == false)
+                {
+                    unlocks.skins.Add(id);
+                }
+                break;
+            case UnlockType.Font:
+                if (unlocks.fonts.Contains(id) == false)
+                {
+                    unlocks.fonts.Add(id);
+                }
+                break;
+            default:
+                break;
+        }
+        Save();
+    }
+
+    public static bool IsUnlocked(UnlockType type, string id)
+    {
+
+        switch (type)
+        {
+            case UnlockType.Pack:
+                return unlocks.packs.Contains(id);
+            case UnlockType.Skin:
+                return unlocks.skins.Contains(id);
+            case UnlockType.Font:
+                return unlocks.fonts.Contains(id);
+            default:
+                return false;
         }
     }
 }

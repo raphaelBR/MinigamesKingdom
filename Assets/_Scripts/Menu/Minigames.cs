@@ -9,26 +9,20 @@ using UnityEngine.UI;
 public class Minigames : MonoBehaviour
 {
     [Header("Coins")]
-    public Text pointsA;
-    public Text pointsB;
-    public Text pointsC;
-    [Header("Costs")]
-    public int costIntermediate;
-    public int costExpert;
-    [Header("Costs")]
+    public Text coins;
+    [Header("Settings")]
     public Text boostCount;
     public Text multiplierCount;
     public Text multiplierCount2;
-    [Header("Costs")]
     public ToggleBundle boosters;
     public Booster boosterPrefab;
     public Transform boosterParent;
     [Header("Anims")]
     public List<CustomAnimRect> lexicalSwitch;
-    public List<CustomAnimRect> helpers;
-    public CustomAnimRect easyDoor;
-    public CustomAnimRect mediumDoor;
-    public CustomAnimRect hardDoor;
+    //public List<CustomAnimRect> helpers;
+    //public CustomAnimRect easyDoor;
+    //public CustomAnimRect mediumDoor;
+    //public CustomAnimRect hardDoor;
 
     List<string> packs = new List<string>();
     bool lex = false;
@@ -40,29 +34,27 @@ public class Minigames : MonoBehaviour
         {
             item.Teleport(0);
         }
-        foreach (var item in helpers)
-        {
-            item.Teleport(0);
-        }
+        //foreach (var item in helpers)
+        //{
+        //    item.Teleport(0);
+        //}
 
-        pointsA.text = Progress.progress.pointsA.ToString();
-        pointsB.text = Progress.progress.pointsB.ToString();
-        pointsC.text = Progress.progress.pointsC.ToString();
+        coins.text = Progress.Coins.ToString();
 
-        easyDoor.Teleport(0);
-        easyDoor.Play(0, 1);
+        //easyDoor.Teleport(0);
+        //easyDoor.Play(0, 1);
 
-        mediumDoor.Teleport(0);
-        if (Progress.progress.pointsA >= costIntermediate)
-        {
-            mediumDoor.Play(0, 1);
-        }
+        //mediumDoor.Teleport(0);
+        //if (Progress.progress.pointsA >= costIntermediate)
+        //{
+        //    mediumDoor.Play(0, 1);
+        //}
 
-        hardDoor.Teleport(0);
-        if (Progress.progress.pointsB >= costExpert)
-        {
-            hardDoor.Play(0, 1);
-        }
+        //hardDoor.Teleport(0);
+        //if (Progress.progress.pointsB >= costExpert)
+        //{
+        //    hardDoor.Play(0, 1);
+        //}
 
         foreach (var booster in boosters.members)
         {
@@ -116,20 +108,20 @@ public class Minigames : MonoBehaviour
         boosters.Filter();
     }
 
-    public void SetHelper(int i)
-    {
-        if (i == 0)
-        {
-            foreach (var item in helpers)
-            {
-                item.GoTo(0);
-            }
-        }
-        else
-        {
-            helpers[i - 1].GoTo(1);
-        }
-    }
+    //public void SetHelper(int i)
+    //{
+    //    if (i == 0)
+    //    {
+    //        foreach (var item in helpers)
+    //        {
+    //            item.GoTo(0);
+    //        }
+    //    }
+    //    else
+    //    {
+    //        helpers[i - 1].GoTo(1);
+    //    }
+    //}
 
     public void ToggleLexical()
     {
@@ -150,17 +142,17 @@ public class Minigames : MonoBehaviour
         }
     }
 
-    public void Pay(int i)
-    {
-        if (i == 0)
-        {
-            Progress.progress.pointsA -= costIntermediate;
-        }
-        else
-        {
-            Progress.progress.pointsB -= costExpert;
-        }
-    }
+    //public void Pay(int i)
+    //{
+    //    if (i == 0)
+    //    {
+    //        Progress.progress.pointsA -= costIntermediate;
+    //    }
+    //    else
+    //    {
+    //        Progress.progress.pointsB -= costExpert;
+    //    }
+    //}
 
     public void LoadDicos()
     {

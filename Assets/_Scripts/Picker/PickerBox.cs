@@ -18,6 +18,8 @@ public class PickerBox : MonoBehaviour
 
     [HideInInspector]
     public string key;
+    [HideInInspector]
+    public int column;
 
     public void Init(string k)
     {
@@ -37,11 +39,14 @@ public class PickerBox : MonoBehaviour
         Destroy(this);
     }
 
-    public void Error()
+    public void Error(bool shake = true)
     {
         butn.interactable = false;
         error.GoTo(1);
-        errorShake.PlayChain();
+        if (shake)
+        {
+            errorShake.PlayChain();
+        }
     }
 
     public void Clear()

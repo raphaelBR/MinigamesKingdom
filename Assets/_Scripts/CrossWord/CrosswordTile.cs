@@ -5,117 +5,41 @@ using UnityEngine.UI;
 
 public class CrosswordTile : MonoBehaviour
 {
-    public Color validColor;
+    public GameObject blankPrefab;
+    public CustomAnimRect anim;
     public Image back;
+    public Color validColor;
+    [HideInInspector]
     public GameObject selected;
-    public InputField field;
-    public Button btn;
-    public RectTransform rect;
-    public Text t;
-    public Image i;
+    //public List<RectTransform> selectedSlots = new List<RectTransform>();
+    
+    public RectTransform r;
     [HideInInspector]
     public Vector2 pos;
-    public List<CrosswordTile> tiles = new List<CrosswordTile>();
-    string lastField;
-    [HideInInspector]
-    public string solution;
-    bool valid;
+    protected CrosswordsAlgorithm master;
 
-    public void Init(Vector2 s, Vector2 p)
+    public virtual void Init(Vector2 s, Vector2 p, CrosswordsAlgorithm m)
     {
-        valid = false;
-        selected.SetActive(false);
-        t.text = "";
-        lastField = "";
-        i.enabled = false;
-        btn.enabled = false;
+        master = m;
         pos = p;
-        rect.sizeDelta = s;
-        rect.anchoredPosition = pos * s;
-    }
 
-    public void SetText(string s)
-    {
-        if (valid == false)
-        {
-            t.text = s.ToUpper();
-        }
-    }
+        var dummy = Instantiate(blankPrefab, transform.parent).GetComponent<RectTransform>();
+        dummy.name = name + "_root";
+        dummy.anchorMin = r.anchorMin;
+        dummy.anchorMax = r.anchorMax;
+        dummy.offsetMin = r.offsetMin;
+        dummy.offsetMax = r.offsetMax;
+        dummy.pivot = r.pivot;
+        dummy.rotation = r.rotation;
+        dummy.localScale = r.localScale;
+        dummy.position = r.position;
 
-    public void SetText(char c)
-    {
-        if (valid == false)
-        {
-            t.text = c.ToString().ToUpper();
-        }
-    }
+        dummy.sizeDelta = s;
+        dummy.anchoredPosition = pos * s;
 
-    public void SetClue(string key)
-    {
-        i.enabled = true;
-        btn.enabled = true;
-        i.sprite = Dico.Picture(key);
-    }
+        anim.state[0].status = dummy;
+        anim.Teleport(0);
 
-    public void ToggleSet()
-    {
-        field.Select();
-        SetActive(Mathf.Min(field.text.Length, tiles.Count - 1));
-        field.text = "";
-    }
-
-    public void SetActive(int j)
-    {
-        if (j < tiles.Count && j >= 0)
-            tiles[j].transform.SetAsLastSibling();
-        for (int i = 0; i < tiles.Count; i++)
-        {
-            tiles[i].selected.SetActive(i == j);
-        }
-    }
-
-    public void Refresh()
-    {
-        if (field.text.Length > tiles.Count)
-        {
-            field.text = field.text.Substring(0, Mathf.Max(field.text.Length - 2, 1)) + field.text.Substring(Mathf.Max(field.text.Length - 1, 0), 1);
-        }
-        else
-        {
-            SetActive(Mathf.Min(field.text.Length, tiles.Count - 1));
-        }
-
-        for (int i = 0; i <= lastField.Length; i++)
-        {
-            if (i < field.text.Length)
-            {
-                tiles[i].SetText(field.text[i]);
-            }
-            else if (i < tiles.Count)
-            {
-                tiles[i].SetText("");
-            }
-        }
-        lastField = field.text;
-    }
-
-    public void CompareSolution()
-    {
-        // Comparison need to handle accents
-        if (solution == t.text)
-        {
-            back.color = validColor;
-            valid = true;
-        }
-    }
-
-    public void Validate()
-    {
-        foreach (var tile in tiles)
-        {
-            tile.CompareSolution();
-        }
-        SetActive(-1);
     }
 
 }

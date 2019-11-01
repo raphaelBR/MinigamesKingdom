@@ -66,6 +66,12 @@ public class BasketBox : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoi
         var pos = rect.position;
         rect.anchorMin = new Vector2(0.5f, 0.5f);
         rect.anchorMax = new Vector2(0.5f, 0.5f);
+        foreach (var it in master.items)
+        {
+            it.errors.Remove(this);
+        }
+        error.Teleport(0);
+        error.enabled = false;
 
         rect.parent = answerPrepare;
         rect.position = pos;
@@ -91,5 +97,4 @@ public class BasketBox : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoi
         mistake.PlayChain();
         errorShake.PlayChain();
     }
-
 }

@@ -19,6 +19,7 @@ public class WordscapeLetter : MonoBehaviour
             anim.SetBool("Active", interactable);
         }
     }
+    public CustomAnimRect animSpawn;
     [Header("AnimWin")]
     public float winDuration = 0.5f;
     public float circleSpeed = 360f;

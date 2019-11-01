@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 struct RectPair
 {
@@ -24,6 +25,9 @@ public class Picker : Practice
     public PickerBox boxPrefab;
     public int gridSpots = 12;
     public int total = 16;
+
+    public Image blocker;
+    public CustomAnimRect jokerLayer;
 
     List<string> keys = new List<string>();
     List<PickerItem> items = new List<PickerItem>();
@@ -70,6 +74,7 @@ public class Picker : Practice
         {
             RectTransform first = b.anim.state[1].status;
             RectTransform second = b.anim.state[2].status;
+            bank.EnableJoker(true);
             bank.Success(b.key);
             items[progress].Win();
             boxes.Remove(b);
@@ -80,11 +85,7 @@ public class Picker : Practice
             }
             progress++;
             bank.Completion = (float)progress / total;
-            if (progress == total)
-            {
-                bank.EndGame(true);
-            }
-            else if (items.Count < total)
+            if (progress != total && items.Count < total)
             {
                 var it = Instantiate(itemPrefab, itemParent);
                 it.Init(keys[gridSpots + progress- 1], itemIn, itemOut);
@@ -107,6 +108,41 @@ public class Picker : Practice
             bank.Failure(b.key);
             b.Error();
         }
+    }
+
+    public override bool UseJoker()
+    {
+        jokerLayer.GoTo(1);
+        blocker.raycastTarget = true;
+        return false;
+    }
+
+    public void JokerLine(int l)
+    {
+        blocker.raycastTarget = false;
+        jokerLayer.GoTo(0);
+        if (boxes.Find(b => items[progress].key == b.key).anim.state[1].status.GetSiblingIndex() % 3 == l)
+        {
+            foreach (var box in boxes)
+            {
+                if (box.anim.state[1].status.GetSiblingIndex() % 3 != l)
+                {
+                    box.Error(false);
+                }
+            }
+        }
+        else
+        {
+            foreach (var box in boxes)
+            {
+                if (box.anim.state[1].status.GetSiblingIndex() % 3 == l)
+                {
+                    box.Error(false);
+                }
+            }
+
+        }
+
     }
 
 }

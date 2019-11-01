@@ -361,6 +361,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8661efcc9671fce4c8d700ca68bec192, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pics:
+  - {fileID: 5848657869504355574}
+  - {fileID: 6511706231178295842}
+  - {fileID: 2600436277080232906}
+  - {fileID: 4787740365446239596}
   state:
   - name: Off
     status: {fileID: 2927320801863297163}
@@ -986,6 +991,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8661efcc9671fce4c8d700ca68bec192, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pics: []
   state:
   - name: Off
     status: {fileID: 8440619075232148008}
@@ -1300,6 +1306,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8661efcc9671fce4c8d700ca68bec192, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pics: []
   state:
   - name: Off
     status: {fileID: 2358935875912886760}

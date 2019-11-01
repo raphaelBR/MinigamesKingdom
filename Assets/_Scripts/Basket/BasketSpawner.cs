@@ -20,18 +20,27 @@ public class BasketSpawner : Practice
     public float waitBeforeAlign = 0.5f;
     public float alignDuration = 0.5f;
     public AnimationCurve alignAnim;
-    int layers = 5;
-    
+    [Header("Spawning")]
+    [Range(1, 15)]
+    public int layers = 5;
+    [Range(1, 8)]
+    public int boxesPerLayer = 5;
+    [Range(0, 3)]
+    public int fakesPerLayer = 1;
+
     Basket current;
     Vector3 align;
     int layerCount = 0;
+    int progress = 0;
+    int total;
 
     void Start()
     {
         generator.Init();
+        total = layers * boxesPerLayer;
         align = basketPool.position - basketSpawn.position;
         current = Instantiate(basketPrefab, basketPool);
-        current.Init(generator.Generate(5), 1);
+        current.Init(generator.Generate(boxesPerLayer + fakesPerLayer), this, fakesPerLayer);
         current.onComplete.AddListener(ScreenComplete);
     }
 
@@ -57,7 +66,7 @@ public class BasketSpawner : Practice
             current.transform.position = pos;
 
             current = Instantiate(basketPrefab, basketSpawn.position, basketSpawn.rotation, basketPool);
-            current.Init(generator.Generate(5), 1);
+            current.Init(generator.Generate(boxesPerLayer + fakesPerLayer), this, fakesPerLayer);
             current.onComplete.AddListener(ScreenComplete);
             StartCoroutine(Align());
         }
@@ -76,5 +85,24 @@ public class BasketSpawner : Practice
             parallax.anchoredPosition = Vector2.Lerp(parallaxStart, parallaxEnd, alignAnim.Evaluate(f));    
             yield return null;
         }
+        bank.EnableJoker(current.fakes.Count > 0);
+    }
+
+    override public bool UseJoker()
+    {
+        return current.Joker();
+    }
+
+    public void Success(string k)
+    {
+        bank.Success(k);
+        progress++;
+        bank.Completion = (float)progress / total;
+    }
+
+    public void Failure(string k1, string k2)
+    {
+        bank.Failure(k1);
+        bank.ChangeXP(k2, -1);
     }
 }

@@ -19,6 +19,7 @@ public class AnimStatus
 [RequireComponent(typeof(RectTransform))]
 public class CustomAnimRect : MonoBehaviour
 {
+    public List<Image> pics;
     public List<AnimStatus> state;
     int current = 0;
 
@@ -91,6 +92,12 @@ public class CustomAnimRect : MonoBehaviour
         {
             LerpRect(origin.status, target.status, target.anim, f);
             f += Time.deltaTime / target.duration;
+            foreach (var img in pics)
+            {
+                Sprite spr = img.sprite;
+                img.sprite = null;
+                img.sprite = spr;
+            }
             yield return null;
         }
         adjust = null;

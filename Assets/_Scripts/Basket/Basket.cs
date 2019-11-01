@@ -11,20 +11,23 @@ public class Basket : MonoBehaviour
     public Transform boxParent;
     public BasketBox boxPrefab;
 
-    List<BasketItem> items = new List<BasketItem>();
+    [HideInInspector]
+    public List<BasketItem> items = new List<BasketItem>();
     [HideInInspector]
     public List<BasketBox> boxes = new List<BasketBox>();
     [HideInInspector]
     public BasketItem selected;
+    [HideInInspector]
+    public List<BasketItem> fakes = new List<BasketItem>();
 
     [HideInInspector]
     public UnityEvent onComplete;
+    [HideInInspector]
+    public BasketSpawner master;
 
-    ScoreBank bank;
-
-    public void Init(List<string> keys, int decoys = 0)
+    public void Init(List<string> keys, BasketSpawner m, int decoys = 0)
     {
-        bank = FindObjectOfType<ScoreBank>();
+        master = m;
         for (int i = 0; i < keys.Count; i++)
         {
             var item = Instantiate(itemPrefab, itemParent);
@@ -37,6 +40,10 @@ public class Basket : MonoBehaviour
                 box.Init(keys[i]);
                 box.master = this;
                 boxes.Add(box);
+            }
+            else
+            {
+                fakes.Add(item);
             }
         }
         Dico.Shuffle(items);
@@ -81,16 +88,14 @@ public class Basket : MonoBehaviour
             selected.Replace();
             Reposition();
             yield return StartCoroutine(box.Success(selected));
-            bank.Success(box.k);
+            master.Success(box.k);
             boxes.Remove(box);
-            Debug.Log("Hardcoded value here");
-            bank.Completion += 0.25f / 5f;
             if (boxes.Count == 0)
             {
                 onComplete.Invoke();
-                foreach (var item in items)
+                foreach (var fake in fakes)
                 {
-                    Destroy(item);
+                    fake.SelfDestruct();
                 }
             }
         }
@@ -101,8 +106,20 @@ public class Basket : MonoBehaviour
                 selected.errors.Add(box);
             }
             box.Fail();
-            bank.Failure(box.k);
-            bank.ChangeXP(selected.k, -1);
+            master.Failure(box.k, selected.k);
         }
+    }
+
+    public bool Joker()
+    {
+        if (fakes.Count > 0)
+        {
+            var fake = fakes[0];
+            items.Remove(fake);
+            fakes.Remove(fake);
+            fake.SelfDestruct();
+            Reposition();
+        }
+        return (fakes.Count > 0);
     }
 }

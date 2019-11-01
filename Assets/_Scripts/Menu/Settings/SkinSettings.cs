@@ -127,6 +127,10 @@ public class SkinSettings : MonoBehaviour {
 
     public void Reset()
     {
+        foreach (var skin in allPreviews)
+        {
+            skin.gameObject.SetActive(Account.IsUnlocked(UnlockType.Skin, skin.name));
+        }
         customization.Teleport(0);
     }
 

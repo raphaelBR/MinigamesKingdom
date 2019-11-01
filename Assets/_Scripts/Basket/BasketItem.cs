@@ -47,7 +47,7 @@ public class BasketItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
 
     void IDragHandler.OnDrag(PointerEventData eventData)
     {
-        transform.position = Camera.main.ScreenToWorldPoint(new Vector3 (Input.mousePosition.x, Input.mousePosition.y, 100f));
+        transform.position = master.master.mainCam.ScreenToWorldPoint(new Vector3 (Input.mousePosition.x, Input.mousePosition.y, 100f));
     }
 
     void IEndDragHandler.OnEndDrag(PointerEventData eventData)
@@ -69,5 +69,11 @@ public class BasketItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
             yield return null;
         }
         rect.anchoredPosition = Vector2.zero;
+    }
+
+    public void SelfDestruct()
+    {
+        anim.SetTrigger("Disappear");
+        enabled = false;
     }
 }

@@ -20,11 +20,7 @@ public class Progression
     [SerializeField]
     public Experience userMastery = new Experience();
     [SerializeField]
-    public int pointsA = 0;
-    [SerializeField]
-    public int pointsB = 0;
-    [SerializeField]
-    public int pointsC = 0;
+    public int coins = 0;
     [SerializeField]
     public int keys = 0;
 }

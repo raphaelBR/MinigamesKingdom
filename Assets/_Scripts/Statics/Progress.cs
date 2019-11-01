@@ -20,6 +20,17 @@ static class Progress
         }
         set { }
     }
+    public static int Coins
+    {
+        get
+        {
+            return progress.coins;
+        }
+        set
+        {
+            progress.coins = value;
+        }
+    }
 
     static Progress()
     {
@@ -103,24 +114,6 @@ static class Progress
             }
             progress.wordsMastery[word].Xp -= GetCap(word);
             progress.wordsMastery[word].Level++;
-        }
-    }
-
-    public static void GainPoints(int amount, int type = 0)
-    {
-        switch (type)
-        {
-            case 1:
-                progress.pointsA += amount;
-                break;
-            case 2:
-                progress.pointsB += amount;
-                break;
-            case 3:
-                progress.pointsC += amount;
-                break;
-            default:
-                break;
         }
     }
 

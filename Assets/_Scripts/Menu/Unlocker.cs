@@ -3,26 +3,56 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum UnlockType
+{
+    Pack,
+    Skin,
+    Font
+}
+
 /// <summary>
 /// The interface used to unlocks packs and cards.
 /// </summary>
 public class Unlocker : MonoBehaviour
 {
-    public Transform packParent;
-    public GameObject packPrefab;
-    public Transform cardParent;
-    public GameObject cardPrefab;
+    public UnlockType type;
+    public string id;
+    public Button btn;
 
-    public Text keysCount;
+    [Header("Price")]
+    public int cost;
+    public Text costDisplay;
+    public Color tooPricey;
+    public Color purchasable;
 
-    private void Start()
+    void Start()
     {
-        
+        Init();
+        costDisplay.text = cost.ToString();
     }
 
     public void Init()
     {
+        if (Account.IsUnlocked(type, id))
+        {
+            gameObject.SetActive(false);
+        }
+        else if (cost > Progress.Coins)
+        {
+            btn.interactable = false;
+            costDisplay.color = tooPricey;
+        }
+        else
+        {
+            costDisplay.color = purchasable;
+        }
+    }
 
+    public void Unlock()
+    {
+        Account.Unlock(type, id);
+        Progress.Coins -= cost;
+        gameObject.SetActive(false);
     }
 
 }

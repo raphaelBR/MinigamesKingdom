@@ -6,17 +6,19 @@ using UnityEngine.UI;
 public class Wordscape : Practice
 {
     [Header("Question")]
+    public GameObject dummyPrefab;
     public WordscapeQuestion questionPrefab;
     public Transform questionParent;
     public RectTransform questionBefore;
     public RectTransform questionIn;
     public RectTransform questionAfter;
     [Header("Input")]
-    public Text answerText;
+    public HorizontalLayoutGroup lettersGroup;
+    public WordscapePreviewLetter previewLetterPrefab;
     public WordscapeLetter letterPrefab;
     public RectTransform inputZone;
     public RectTransform inputField;
-    public Transform spawnCenter;
+    public RectTransform spawnCenter;
     [Header("Feedback")]
     public LineRenderer line;
     public LineRenderer line2;
@@ -26,16 +28,23 @@ public class Wordscape : Practice
 
     List<string> words = new List<string>();
     List<WordscapeLetter> letters = new List<WordscapeLetter>();
+    List<WordscapePreviewLetter> entryField = new List<WordscapePreviewLetter>();
     List<Vector3> linePoints = new List<Vector3>();
     [HideInInspector]
     public float spawnRange = 100f;
     string solution;
     string answer;
+    bool[] hint;
     int progress;
     WordscapeQuestion current;
 
     private void Start()
     {
+        // Spawn Preview Letters
+        for (int m = 0; m < 26; m++)
+        {
+            entryField.Add(Instantiate(previewLetterPrefab, lettersGroup.transform));
+        }
         // Scale
         questionIn.offsetMin = new Vector2(0f, Screen.width * 0.85f + 100f);
         inputField.offsetMin = new Vector2(0f, Screen.width * 0.85f);
@@ -62,12 +71,14 @@ public class Wordscape : Practice
 
         solution = Dico.Foreign(test);
         // Clear the board
-        answer = "";
-        answerText.text = answer.PadRight(solution.Length, '\u005F').Replace("_", " _");
-        foreach (WordscapeLetter l in letters)
+        for (int j = 0; j < entryField.Count; j++)
         {
-            Destroy(l.gameObject);
+            entryField[j].gameObject.SetActive(j < solution.Length);
         }
+        lettersGroup.enabled = true;
+        answer = "";
+        hint = new bool[solution.Length];
+        ApplyText();
         letters.Clear();
         linePoints.Clear();
         // Spawn letters
@@ -83,17 +94,25 @@ public class Wordscape : Practice
         var angle = 360f / solution.Length;
         foreach (WordscapeLetter t in letters)
         {
+            GameObject dummy = Instantiate(dummyPrefab, spawnCenter);
             var x = spawnCenter.position.x + spawnRange * Mathf.Sin(angle * i * Mathf.Deg2Rad);
             var y = spawnCenter.position.y + spawnRange * Mathf.Cos(angle * i * Mathf.Deg2Rad);
-            t.transform.localPosition = new Vector3(x, y);
+            dummy.transform.localPosition = new Vector3(x, y);
+            t.animSpawn.state[0].status = spawnCenter;
+            t.animSpawn.state[1].status = dummy.GetComponent<RectTransform>();
+            t.animSpawn.Play(0, 1);
             i++;
         }
     }
 
+
+
     public void InputLetter(string s, Vector3 pos)
     {
+        lettersGroup.enabled = false;
         answer = answer + s;
-        answerText.text = answer.PadRight(solution.Length, '\u005F').Replace("_", " _");
+        ApplyText();
+
         linePoints.Add(new Vector3(pos.x, pos.y, 0f));
         if (solution.Length == answer.Length)
         {
@@ -118,17 +137,18 @@ public class Wordscape : Practice
         }
         yield return new WaitForSeconds(0.5f);
         explode.Play();
+        foreach (WordscapeLetter l in letters)
+        {
+            Destroy(l.gameObject);
+        }
         yield return new WaitForSeconds(0.2f);
         bank.Success(words[progress]);
         current.anim.Play(1, 2);
         //OnWin.Invoke();
         progress++;
+        bank.EnableJoker(true);
         bank.Completion = (float)progress / total;
-        if (progress >= total)
-        {
-            bank.EndGame(true);
-        }
-        else
+        if (progress < total)
         {
             Init();
         }
@@ -141,9 +161,18 @@ public class Wordscape : Practice
         {
             StartCoroutine(t.Shake());
         }
+        for (int i = 0; i < answer.Length; i++)
+        {
+            if (string.Equals(answer.Substring(i, 1), solution.Substring(i, 1), System.StringComparison.OrdinalIgnoreCase))
+            {
+                hint[i] = true;
+            }
+        }
+        ApplyText();
         yield return new WaitForSeconds(0.5f);
         answer = "";
-        answerText.text = answer.PadRight(solution.Length, '\u005F').Replace("_", " _");
+        ApplyText();
+
 
         //OnLose.Invoke();
         //Init();
@@ -157,7 +186,26 @@ public class Wordscape : Practice
         }
         linePoints.Clear();
         answer = "";
-        answerText.text = answer.PadRight(solution.Length, '\u005F').Replace("_", " _");
+        ApplyText();
+    }
+
+    void ApplyText()
+    {
+        for (int i = 0; i < solution.Length; i++)
+        {
+            if (i < answer.Length)
+            {
+                entryField[i].SetText(answer.Substring(i, 1), EntryType.Valid);
+            }
+            else if (hint[i] == true)
+            {
+                entryField[i].SetText(solution.Substring(i, 1), EntryType.Hint);
+            }
+            else
+            {
+                entryField[i].SetText(null, EntryType.Empty);
+            }
+        }
     }
 
     void Update()
@@ -173,7 +221,7 @@ public class Wordscape : Practice
             line2.positionCount = 2;
             Vector3[] second = new Vector3[2];
             second[0] = linePoints[linePoints.Count - 1];
-            second[1] = new Vector3(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y, 0f);
+            second[1] = new Vector3(mainCam.ScreenToWorldPoint(Input.mousePosition).x, mainCam.ScreenToWorldPoint(Input.mousePosition).y, 0f);
             line2.SetPositions(second);
         }
         else
@@ -181,6 +229,26 @@ public class Wordscape : Practice
             line2.SetPositions(linePoints.ToArray());
             line2.positionCount = 0;
         }
+    }
+
+    public override bool UseJoker()
+    {
+        int count = (solution.Length + 1) / 2;
+        for (int i = 0; i < solution.Length; i++)
+        {
+            if (hint[i] == false)
+            {
+                hint[i] = true;
+                count--;
+                if (count <= 0)
+                {
+                    break;
+                }
+            }
+        }
+        lettersGroup.enabled = false;
+        ApplyText();
+        return false;
     }
 
 }

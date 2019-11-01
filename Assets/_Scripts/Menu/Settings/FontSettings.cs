@@ -31,10 +31,19 @@ public class FontSettings : MonoBehaviour {
             SpawnButton(font);
         }
 	}
-	
-	void SpawnButton(Font f) {
+
+    public void Reset()
+    {
+        foreach (var button in allButtons)
+        {
+            button.gameObject.SetActive(Account.IsUnlocked(UnlockType.Font, button.name));
+        }
+    }
+
+    void SpawnButton(Font f) {
         Button b = Instantiate(prefab, content);
         Text t = b.GetComponentInChildren<Text>();
+        b.name = f.fontNames[0];
         t.font = f;
         t.text = f.fontNames[0];
         b.onClick.AddListener(delegate { Validate(f); });

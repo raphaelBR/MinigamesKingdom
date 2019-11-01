@@ -7,7 +7,15 @@ using UnityEngine.SceneManagement;
 /// The canvas that transitions between scenes.
 /// </summary>
 public class Loading : MonoBehaviour {
-    
+
+
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Reload();
+        }
+    }
 
     public void LoadScene(string levelName)
     {

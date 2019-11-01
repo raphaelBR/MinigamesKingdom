@@ -20,6 +20,7 @@ public class SkinPreview : MonoBehaviour
 
     public void Init(Skin s, SkinSettings set, bool custom = false)
     {
+        name = s.theme;
         if (custom)
         {
             edit.onClick.RemoveAllListeners();

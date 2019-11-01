@@ -17,6 +17,8 @@ public class ScoreBank : MonoBehaviour
     public bool usesLife;
     [Range(1, 10)]
     public int maxLife = 3;
+    [Range(0, 10)]
+    public int jokers = 3;
     public int pointsPerWin = 10;
     public int xpPerWin = 10;
     public int pointsPerLose = 1;
@@ -27,6 +29,9 @@ public class ScoreBank : MonoBehaviour
     public ParticleSystem pointsLoss;
     public float pointsDuration = 0.5f;
     public AnimationCurve pointsCurve;
+    [Header("Jokers")]
+    public Button jokerButton;
+    public Text jokersCounter;
     [Header("Completion")]
     public Text completionPercent;
     public Image completionBar;
@@ -44,6 +49,8 @@ public class ScoreBank : MonoBehaviour
     public AnimationCurve wordCurve;
     public PointsTransfer pointsTransfer;
 
+    [HideInInspector]
+    public Practice target;
     Coroutine c;
     Coroutine p;
 
@@ -129,6 +136,7 @@ public class ScoreBank : MonoBehaviour
         completionPercent.text = "0%";
         Multiplier = 1;
         Life = maxLife;
+        jokersCounter.text = jokers.ToString();
         Completion = 0f;
         
     }
@@ -171,7 +179,6 @@ public class ScoreBank : MonoBehaviour
 
     public void EndGame(bool win)
     {
-        Debug.Log("Insert Win/Lose Here");
         anim.SetTrigger("On");
         var playerXp = 0;
         var words = new List<ExpBar>();
@@ -188,6 +195,18 @@ public class ScoreBank : MonoBehaviour
         pointsTransfer.Init(Points);
         StartCoroutine(EndBars(words));
         Progress.Save();
+    }
+
+    public void UseJoker()
+    {
+        jokers--;
+        jokersCounter.text = jokers.ToString();
+        EnableJoker(target.UseJoker());
+    }
+
+    public void EnableJoker(bool state)
+    {
+        jokerButton.interactable = (state && jokers > 0);
     }
 
     IEnumerator EndBars(List<ExpBar> wordBars)
@@ -242,6 +261,10 @@ public class ScoreBank : MonoBehaviour
             completionBar.fillAmount = current;
             completionPercent.text = (int)(current * 100f + 0.5f) + "%";
             yield return null;
+        }
+        if (completion >= 1f)
+        {
+            EndGame(true);
         }
     }
 
